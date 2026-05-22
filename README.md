@@ -1,3 +1,3 @@
 # Product Service
 
-Grundstruktur för product-service.
+Grundstrukturen för product-service
