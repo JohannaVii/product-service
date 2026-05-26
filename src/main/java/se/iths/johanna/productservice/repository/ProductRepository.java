@@ -5,4 +5,5 @@ import se.iths.johanna.productservice.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    boolean existById(Long id);
 }
