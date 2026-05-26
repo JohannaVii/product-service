@@ -24,6 +24,10 @@ public class Product {
 
     // Konstruktor
     public Product(String name, String description, BigDecimal price, int stock) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
     }
 
     // Metod - Hämtar produktens id
@@ -53,6 +57,6 @@ public class Product {
 
     // Metod - Uppdaterar lagersaldo
     public void setId(Long id) {
-        this.stock = stock;
+        this.id = id;
     }
 }
