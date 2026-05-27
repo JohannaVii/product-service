@@ -10,7 +10,7 @@ import se.iths.johanna.productservice.repository.ProductRepository;
 
 import java.util.List;
 
-// import se.iths.johanna.productservice.model.Product;
+// import se.iths.johanna.productservice.entity.Product;
 
 @Service
 public class ProductService {
