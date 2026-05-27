@@ -56,7 +56,7 @@ public class Product {
     }
 
     // Metod - Uppdaterar lagersaldo
-    public void setId(Long id) {
-        this.id = id;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 }
