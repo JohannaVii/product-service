@@ -6,7 +6,7 @@ import se.iths.johanna.productservice.dto.OrderRequestItem;
 import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
-import se.iths.johanna.productservice.model.Product;
+import se.iths.johanna.productservice.entity.Product;
 import se.iths.johanna.productservice.repository.ProductRepository;
 
 import java.util.List;

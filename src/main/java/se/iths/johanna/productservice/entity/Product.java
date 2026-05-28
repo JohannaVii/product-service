@@ -1,4 +1,4 @@
-package se.iths.johanna.productservice.model;
+package se.iths.johanna.productservice.entity;
 
 import jakarta.persistence.*;
 
