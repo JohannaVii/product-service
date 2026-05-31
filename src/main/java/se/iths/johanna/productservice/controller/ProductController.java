@@ -35,14 +35,14 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAll() {
 
-        return ResponseEntity.ok(service.getAllProducts());
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
     }
 
     // Metod - Hämta produkter (id) (GET)
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(service.getProductById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));
     }
 
     // Metod - Ta bort produkt (DELETE)
@@ -51,7 +51,6 @@ public class ProductController {
 
         service.deleteProduct(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

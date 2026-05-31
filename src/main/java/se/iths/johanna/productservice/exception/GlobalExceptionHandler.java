@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
     // Metod - Hanterar övriga fel
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException ex) {
 
         // - Skapar felmeddelande
         ErrorResponse response = new ErrorResponse(ex.getMessage(), List.of());
