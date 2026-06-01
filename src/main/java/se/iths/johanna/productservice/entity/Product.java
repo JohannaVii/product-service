@@ -1,18 +1,11 @@
 package se.iths.johanna.productservice.entity;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "products")
 public class Product {
 
     // Attribut
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String description;
     private BigDecimal price;
@@ -23,7 +16,8 @@ public class Product {
     }
 
     // Konstruktor
-    public Product(String name, String description, BigDecimal price, int stock) {
+    public Product(Long id, String name, String description, BigDecimal price, int stock) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
