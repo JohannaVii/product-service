@@ -1,5 +1,6 @@
 package se.iths.johanna.productservice.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ProductController {
 
     // Metod - Skapa produkt (POST)
     @PostMapping
-    public ResponseEntity<ProductResponseDto> create(@RequestBody ProductRequestDto dto) {
+    public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto dto) {
 
         ProductResponseDto created = service.createProduct(dto);
 
@@ -34,14 +35,14 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAll() {
 
-        return ResponseEntity.ok(service.getAllProducts());
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
     }
 
     // Metod - Hämta produkter (id) (GET)
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(service.getProductById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));
     }
 
     // Metod - Ta bort produkt (DELETE)
@@ -50,7 +51,6 @@ public class ProductController {
 
         service.deleteProduct(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

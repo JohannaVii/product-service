@@ -25,10 +25,10 @@ public class ProductService {
     // Metod - Skapa produkt
     public ProductResponseDto createProduct(ProductRequestDto dto) {
         Product product = new Product(
-                dto.getName(),
-                dto.getDescription(),
-                dto.getPrice(),
-                dto.getStock()
+                dto.name(),
+                dto.description(),
+                dto.price(),
+                dto.stock()
         );
 
         Product saved = repository.save(product);
@@ -83,6 +83,7 @@ public class ProductService {
     // Metod - Minska antal produkter (order)
     @Transactional
     public List<ProductInfo> updatedStock(List<OrderRequestItem> items) {
+
         List<Long> ids = items.stream()
                 .map(OrderRequestItem::getProductId)
                 .toList();
