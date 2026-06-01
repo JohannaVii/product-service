@@ -35,6 +35,11 @@ public class Product {
         return id;
     }
 
+    // Metod - Sätter id (test)
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     // Metod - Hämtar produktnamn
     public String getName() {
         return name;

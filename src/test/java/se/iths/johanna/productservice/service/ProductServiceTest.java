@@ -129,9 +129,10 @@ class ProductServiceTest {
         OrderRequestItem item = new OrderRequestItem(1L, 2);
 
         Product product1 = new Product("A", "Description", BigDecimal.valueOf(10), 5);
+        product1.setId(1L);
         product1.setStock(5);
 
-        when(repository.findAllById(List.of(1L))).thenReturn(List.of(product1));
+        when(repository.findAllById(any())).thenReturn(List.of(product1));
 
         // Act
         List<ProductInfo> result = service.updatedStock(List.of(item));
