@@ -14,14 +14,6 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    // Variabel
-    //private final ProductRepository repository;
-
-    // Konstruktor
-    //public ProductService(ProductRepository repository) {
-    //this.repository = repository;
-    //}
-
     // Metod - Skapa produkt
     public ProductResponseDto createProduct(ProductRequestDto dto) {
 
