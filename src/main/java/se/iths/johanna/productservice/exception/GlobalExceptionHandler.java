@@ -27,12 +27,26 @@ public class GlobalExceptionHandler {
     }
 
     // Metod - Hanterar övriga fel
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleException(RuntimeException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
 
         // - Skapar felmeddelande
         ErrorResponse response = new ErrorResponse(ex.getMessage(), List.of());
 
         return ResponseEntity.badRequest().body(response);
+    }
+
+    // Metod - Produkt hittades inte
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFound(ProductNotFoundException ex) {
+
+        return ResponseEntity.notFound().build();
+    }
+
+    // Metod - Inte tillräckligt lagersaldo
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
+
+        return ResponseEntity.badRequest().body(new ErrorResponse(ex.getMessage(), List.of()));
     }
 }
