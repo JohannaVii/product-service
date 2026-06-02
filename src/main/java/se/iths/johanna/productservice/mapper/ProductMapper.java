@@ -2,6 +2,7 @@ package se.iths.johanna.productservice.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
 import se.iths.johanna.productservice.entity.Product;
@@ -13,4 +14,6 @@ public interface ProductMapper {
     Product toEntity(ProductRequestDto dto);
 
     ProductResponseDto toResponse(Product entity);
+
+    ProductInfo toInfo(Product entity);
 }
