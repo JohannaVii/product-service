@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.iths.johanna.productservice.dto.OrderRequestItem;
+import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
 import se.iths.johanna.productservice.service.ProductService;
@@ -61,8 +62,8 @@ public class ProductController {
     }
 
     // Metod - Minska lagersaldo (POST)
-    @PostMapping("/stock")
-    public ResponseEntity<List<ProductResponseDto>> decreaseStock(@RequestBody List<OrderRequestItem> items) {
+    @PostMapping("/stock/decrease")
+    public ResponseEntity<List<ProductInfo>> decreaseStock(@RequestBody List<OrderRequestItem> items) {
 
         return ResponseEntity.ok(service.decreaseStock(items));
     }

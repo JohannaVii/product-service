@@ -3,6 +3,7 @@ package se.iths.johanna.productservice.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import se.iths.johanna.productservice.dto.OrderRequestItem;
+import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
 import se.iths.johanna.productservice.entity.Product;
@@ -66,7 +67,7 @@ public class ProductService {
 
     // Metod - Minska antal produkter (order)
     @Transactional
-    public List<ProductResponseDto> decreaseStock(List<OrderRequestItem> items) {
+    public List<ProductInfo> decreaseStock(List<OrderRequestItem> items) {
 
         List<Product> products = items.stream().map(req -> {
 
@@ -87,6 +88,6 @@ public class ProductService {
             return repository.save(product);
         }).toList();
 
-        return updatedStock.stream().map(mapper::toResponse).toList();
+        return updatedStock.stream().map(mapper::toInfo).toList();
     }
 }
