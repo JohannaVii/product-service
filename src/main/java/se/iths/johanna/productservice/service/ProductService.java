@@ -79,15 +79,17 @@ public class ProductService {
             return product;
         }).toList();
 
-        List<Product> updatedStock = items.stream().map(req -> {
+        List<ProductInfo> updatedStock = items.stream().map(req -> {
 
             Product product = products.stream().filter(p -> p.getId().equals(req.getProductId())).findFirst().get();
 
             product.setStock(product.getStock() - req.getQuantity());
 
-            return repository.save(product);
+            repository.save(product);
+
+            return new ProductInfo(product.getId(), product.getName(), product.getPrice(), req.getQuantity());
         }).toList();
 
-        return updatedStock.stream().map(mapper::toInfo).toList();
+        return updatedStock;
     }
 }
