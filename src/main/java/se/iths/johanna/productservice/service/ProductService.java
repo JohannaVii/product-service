@@ -3,72 +3,90 @@ package se.iths.johanna.productservice.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import se.iths.johanna.productservice.dto.OrderRequestItem;
-import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
 import se.iths.johanna.productservice.entity.Product;
+import se.iths.johanna.productservice.exception.InsufficientStockException;
+import se.iths.johanna.productservice.exception.ProductNotFoundException;
+import se.iths.johanna.productservice.mapper.ProductMapper;
+import se.iths.johanna.productservice.repository.ProductRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class ProductService {
 
+    // Variabel
+    private final ProductRepository repository;
+    private final ProductMapper mapper;
+
+    // Konstruktor
+    public ProductService(ProductRepository repository, ProductMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
     // Metod - Skapa produkt
     public ProductResponseDto createProduct(ProductRequestDto dto) {
 
-        Product saved = new Product(
-                1L,
+        Product newProduct = new Product(
                 dto.name(),
                 dto.description(),
                 dto.price(),
                 dto.stock()
         );
 
-        return new ProductResponseDto(
-                saved.getId(),
-                saved.getName(),
-                saved.getDescription(),
-                saved.getPrice(),
-                saved.getStock()
-        );
+        Product saved = repository.save(newProduct);
+
+        return mapper.toResponse(saved);
+
     }
 
     // Metod - Hämta alla produkter
     public List<ProductResponseDto> getAllProducts() {
-        return List.of(
-                new ProductResponseDto(1L, "Mock Product 1", "Test", new BigDecimal("99.90"), 10),
-                new ProductResponseDto(2L, "Mock Product 2", "Test", new BigDecimal("149.90"), 5)
-        );
+        return repository.findAll().stream().map(mapper::toResponse).toList();
     }
 
     // Metod - Hämta produkt (id)
     public ProductResponseDto getProductById(Long id) {
 
-        return new ProductResponseDto(
-                id,
-                "Mock Product",
-                "Test",
-                new BigDecimal("99.90"),
-                10
-        );
+        Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Produkt hittades inte!"));
+
+        return mapper.toResponse(product);
     }
 
     // Metod - Ta bort produkt
     public void deleteProduct(Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ProductNotFoundException("Produkt hittades inte!");
+        }
+        repository.deleteById(id);
     }
 
     // Metod - Minska antal produkter (order)
     @Transactional
-    public List<ProductInfo> updatedStock(List<OrderRequestItem> items) {
+    public List<ProductResponseDto> decreaseStock(List<OrderRequestItem> items) {
 
-        return items.stream()
-                .map(i -> new ProductInfo(
-                        i.getProductId(),
-                        "Mock Product",
-                        new BigDecimal("99.90"),
-                        i.getQuantity()
-                ))
-                .toList();
+        List<Product> products = items.stream().map(req -> {
+
+            Product product = repository.findById(req.getProductId()).orElseThrow(() -> new ProductNotFoundException("Produkt hittades inte!"));
+
+            if (product.getStock() < req.getQuantity()) {
+                throw new InsufficientStockException("Inte tillräckligt lagersaldo!");
+            }
+            return product;
+        }).toList();
+
+        List<Product> updatedStock = items.stream().map(req -> {
+
+            Product product = products.stream().filter(p -> p.getId().equals(req.getProductId())).findFirst().get();
+
+            product.setStock(product.getStock() - req.getQuantity());
+
+            return repository.save(product);
+        }).toList();
+
+        return updatedStock.stream().map(mapper::toResponse).toList();
     }
 }
