@@ -15,6 +15,7 @@ import se.iths.johanna.productservice.repository.ProductRepository;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("Test")
+@ActiveProfiles("test")
 public class ProductIntegrationTest {
 
     // Variabler
@@ -118,6 +119,8 @@ public class ProductIntegrationTest {
                 .andExpect(jsonPath("$[0].quantity").value(2));
 
         Product updated = repository.findById(saved.getId()).orElseThrow();
+
+        assertEquals(8, updated.getStock());
     }
 
     // Test - Fel kastas vid otillräckligt lagersaldo
