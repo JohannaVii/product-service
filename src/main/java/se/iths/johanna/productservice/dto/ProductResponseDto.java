@@ -1,5 +1,7 @@
 package se.iths.johanna.productservice.dto;
 
+import se.iths.johanna.productservice.entity.Category;
+
 import java.math.BigDecimal;
 
 public class ProductResponseDto {
@@ -10,14 +12,18 @@ public class ProductResponseDto {
     private String description;
     private BigDecimal price;
     private int stock;
+    private Category category;
+    private String imageUrl;
 
     // Konstruktor
-    public ProductResponseDto(Long id, String name, String description, BigDecimal price, int stock) {
+    public ProductResponseDto(Long id, String name, String description, BigDecimal price, int stock, Category category, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.category = category;
+        this.imageUrl = imageUrl;
     }
 
     // Metod - Hämtar produktens id
@@ -43,6 +49,16 @@ public class ProductResponseDto {
     // Metod - Hämtar lagersaldo
     public int getStock() {
         return stock;
+    }
+
+    // Metod - Hämtar kategori
+    public Category getCategory() {
+        return category;
+    }
+
+    // Metod - Hämtar bild (URL)
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
 

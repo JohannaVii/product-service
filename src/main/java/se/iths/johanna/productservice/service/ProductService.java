@@ -34,7 +34,9 @@ public class ProductService {
                 dto.name(),
                 dto.description(),
                 dto.price(),
-                dto.stock()
+                dto.stock(),
+                dto.category(),
+                dto.imageUrl()
         );
 
         Product saved = repository.save(newProduct);
