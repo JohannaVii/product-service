@@ -27,12 +27,18 @@ public class SecurityConfig {
         // Http-regler
         http
                 .cors(withDefaults())
+                // API:t är stateless och använder JWT, så CSRF behövs inte
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        // visar riktiga felmeddelanden i stället för ett tomt 401
+                        .requestMatchers("/error").permitAll()
+                        // lageråterställning autentiseras med en intern hemlighet i controllern
+                        .requestMatchers(HttpMethod.POST, "/products/stock/restore").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt ->
