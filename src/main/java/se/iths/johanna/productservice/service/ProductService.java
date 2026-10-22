@@ -94,4 +94,38 @@ public class ProductService {
 
         return updatedStock;
     }
+
+
+    // återställer lagersaldot när en Stripe-betalning inte genomförs
+    @Transactional
+    public void restoreStock(List<OrderRequestItem> items) {
+
+        // kontrollera att antal är större än 0
+        items.forEach(req -> {
+            if (req.getQuantity() <= 0) {
+                throw new IllegalArgumentException("Antal måste vara större än 0");
+            }
+        });
+
+        // kontrollera att alla produkter finns innan lagret ändras
+        List<Product> products = items.stream().map(req -> {
+            Product product = repository.findById(req.getProductId())
+                    .orElseThrow(() ->
+                            new ProductNotFoundException("Produkt hittades inte!"));
+
+            return product;
+        }).toList();
+
+        // lägg tillbaka det beställda antalet på varje produkt
+        items.forEach(req -> {
+            Product product = products.stream()
+                    .filter(p -> p.getId().equals(req.getProductId()))
+                    .findFirst()
+                    .orElseThrow();
+
+            product.setStock(product.getStock() + req.getQuantity());
+            repository.save(product);
+        });
+    }
+
 }
