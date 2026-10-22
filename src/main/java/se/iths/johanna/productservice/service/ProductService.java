@@ -100,6 +100,13 @@ public class ProductService {
     @Transactional
     public void restoreStock(List<OrderRequestItem> items) {
 
+        // kontrollera att antal är större än 0
+        items.forEach(req -> {
+            if (req.getQuantity() <= 0) {
+                throw new IllegalArgumentException("Antal måste vara större än 0");
+            }
+        });
+
         // kontrollera att alla produkter finns innan lagret ändras
         List<Product> products = items.stream().map(req -> {
             Product product = repository.findById(req.getProductId())
