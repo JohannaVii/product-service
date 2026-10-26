@@ -69,9 +69,12 @@ Lägga till / ta bort produkter är endast tillgängligt för ADMIN.
 
 ### Lager
 
-`POST /products/stock/decrease` - minskar lagersaldot
+`POST /products/stock/decrease` - minskar lagersaldot vid orderhantering.
+Kräver autentisering.
 
-`POST /products/stock/restore` - återställer lagersaldot
+`POST /products/stock/restore` - återställer lagersaldot när Stripe-checkout
+löper ut. Anropet autentiseras med intern token som skickas i headern:
+`X-Internal-Service-Token`
 
 ### Status
 
