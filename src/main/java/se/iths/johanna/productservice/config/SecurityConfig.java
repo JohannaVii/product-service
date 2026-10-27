@@ -16,11 +16,21 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Konfigurerar säkerheten för Product Service
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    /**
+     * Konfigurerar säkerhetsregler för HTTP-anrop
+     *
+     * @param http används för att konfigurera säkerheten
+     * @return säkerhetsinställningarna för HTTP-anrop
+     * @throws Exception om säkerhetskonfigurationen misslyckas
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -47,6 +57,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Konfigurerar roller för JWT
+     *
+     * @return konfigurationen för JWT-roller
+     */
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -61,6 +76,12 @@ public class SecurityConfig {
         return jwtConverter;
     }
 
+    /**
+     * Skapar en decoder för JWT
+     *
+     * @param publicUrl används för att hämta public key
+     * @return en JWT-decoder
+     */
     @Bean
     public JwtDecoder jwtDecoder(@Value("${jwt-public-key}") String publicUrl) {
 

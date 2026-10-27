@@ -14,6 +14,9 @@ import se.iths.johanna.productservice.repository.ProductRepository;
 
 import java.util.List;
 
+/**
+ * Hanterar logik för produkter och lagersaldo
+ */
 @Service
 public class ProductService {
 
@@ -21,13 +24,23 @@ public class ProductService {
     private final ProductRepository repository;
     private final ProductMapper mapper;
 
-    // Konstruktor
+    /**
+     * Konstruktor för ProductService
+     *
+     * @param repository används för att hämta och spara produkter
+     * @param mapper     används för att mappa produkter mellan entity och DTO
+     */
     public ProductService(ProductRepository repository, ProductMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
 
-    // Metod - Skapa produkt
+    /**
+     * Skapar en ny produkt
+     *
+     * @param dto innehåller information om produkten  som ska skapas
+     * @return den skapade produkten (ProductResponseDto)
+     */
     public ProductResponseDto createProduct(ProductRequestDto dto) {
 
         Product newProduct = new Product(
@@ -45,12 +58,22 @@ public class ProductService {
 
     }
 
-    // Metod - Hämta alla produkter
+    /**
+     * Hämtar alla produkter
+     *
+     * @return en lista med alla produkter (ProductResponseDto)
+     */
     public List<ProductResponseDto> getAllProducts() {
         return repository.findAll().stream().map(mapper::toResponse).toList();
     }
 
-    // Metod - Hämta produkt (id)
+    /**
+     * Hämtar en produkt med id
+     *
+     * @param id används för att hitta rätt produkt
+     * @return produkten med id (ProductResponseDto)
+     * @throws ProductNotFoundException om produkten inte finns
+     */
     public ProductResponseDto getProductById(Long id) {
 
         Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Produkt hittades inte!"));
@@ -58,7 +81,12 @@ public class ProductService {
         return mapper.toResponse(product);
     }
 
-    // Metod - Ta bort produkt
+    /**
+     * Tar bort en produkt med id
+     *
+     * @param id används för att hitta produkten som ska tas bort
+     * @throws ProductNotFoundException om produkten inte finns
+     */
     public void deleteProduct(Long id) {
 
         if (!repository.existsById(id)) {
@@ -67,7 +95,14 @@ public class ProductService {
         repository.deleteById(id);
     }
 
-    // Metod - Minska antal produkter (order)
+    /**
+     * Minskar lagersaldot för produkter i en order
+     *
+     * @param items innehåller produkter och antal som ska dras från lagret
+     * @return information om produkterna i ordern (ProductInfo)
+     * @throws ProductNotFoundException   om en produkt inte finns
+     * @throws InsufficientStockException om lagersaldot inte räcker
+     */
     @Transactional
     public List<ProductInfo> decreaseStock(List<OrderRequestItem> items) {
 
@@ -96,7 +131,13 @@ public class ProductService {
     }
 
 
-    // återställer lagersaldot när en Stripe-betalning inte genomförs
+    /**
+     * Återställer lagersaldot när en Stripe-betalning inte genomförs
+     *
+     * @param items innehåller produkter och antal som ska läggas tillbaka i lagret
+     * @throws IllegalArgumentException om antalet är 0 eller mindre
+     * @throws ProductNotFoundException om en produkt inte finns
+     */
     @Transactional
     public void restoreStock(List<OrderRequestItem> items) {
 

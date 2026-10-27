@@ -7,6 +7,16 @@ import se.iths.johanna.productservice.entity.Category;
 
 import java.math.BigDecimal;
 
+/**
+ * Information för att skapa eller uppdatera en produkt
+ *
+ * @param name        anger produktens namn
+ * @param description beskriver produkten
+ * @param price       produktens pris
+ * @param stock       anger produktens lagersaldo
+ * @param category    anger vilken kategori produkten tillhör
+ * @param imageUrl    anger länken till produktens bild
+ */
 public record ProductRequestDto(
 
         // Variabler

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Produkt som används i webbshoppen
+ * En produkt har namn, beskrivning, pris, lagersaldo, kategori och bild
+ */
 @Entity
 @Table(name = "products")
 public class Product {
@@ -23,11 +27,23 @@ public class Product {
     private String imageUrl;
 
 
-    // Konstruktor - Tom
+    /**
+     * Tom konstruktor som används av JPA
+     */
     public Product() {
     }
 
-    // Konstruktor
+    /**
+     * Konstruktor som skapar en produkt med id och produktinformation
+     *
+     * @param id          används för att identifiera produkten
+     * @param name        anger produktens namn
+     * @param description beskriver produkten
+     * @param price       produktens pris
+     * @param stock       anger produktens lagersaldo
+     * @param category    anger vilken kategori produkten tillhör
+     * @param imageUrl    anger länken till produktens bild
+     */
     public Product(Long id, String name, String description, BigDecimal price, int stock, Category category, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -38,7 +54,16 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    // Konstruktor - Utan id
+    /**
+     * Konstruktor som skapar en produkt utan id
+     *
+     * @param name        anger produktens namn
+     * @param description beskriver produkten
+     * @param price       produktens pris
+     * @param stock       anger produktens lagersaldo
+     * @param category    anger vilken kategori produkten tillhör
+     * @param imageUrl    anger länken till produktens bild
+     */
     public Product(String name, String description, BigDecimal price, int stock, Category category, String imageUrl) {
         this.name = name;
         this.description = description;

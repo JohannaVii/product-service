@@ -2,6 +2,9 @@ package se.iths.johanna.productservice.dto;
 
 import java.math.BigDecimal;
 
+/**
+ * Information om en produkt som används i order
+ */
 public class ProductInfo {
 
     // Variabler
@@ -10,7 +13,14 @@ public class ProductInfo {
     private BigDecimal price;
     private int quantity;
 
-    // Konstruktor
+    /**
+     * Konstruktor som skapar produktinformation för en order
+     *
+     * @param id       används för att identifiera produkten
+     * @param name     anger produktens namn
+     * @param price    produktens pris
+     * @param quantity anger antal av produkten
+     */
     public ProductInfo(Long id, String name, BigDecimal price, int quantity) {
         this.id = id;
         this.name = name;
