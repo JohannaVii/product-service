@@ -9,9 +9,17 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Konfigurerar Swagger för Product Service
+ */
 @Configuration
 public class SwaggerConfig {
 
+    /**
+     * Skapar inställningar för Swagger
+     *
+     * @return inställningar för Swagger
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -30,6 +38,11 @@ public class SwaggerConfig {
                                         .description("JWT auth description")));
     }
 
+    /**
+     * Skapar en grupp för API:t
+     *
+     * @return gruppen för API:t
+     */
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()

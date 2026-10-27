@@ -11,10 +11,15 @@ import se.iths.johanna.productservice.dto.OrderRequestItem;
 import se.iths.johanna.productservice.dto.ProductInfo;
 import se.iths.johanna.productservice.dto.ProductRequestDto;
 import se.iths.johanna.productservice.dto.ProductResponseDto;
+import se.iths.johanna.productservice.exception.InsufficientStockException;
+import se.iths.johanna.productservice.exception.ProductNotFoundException;
 import se.iths.johanna.productservice.service.ProductService;
 
 import java.util.List;
 
+/**
+ * Hanterar produkter och lagersaldo
+ */
 @RestController
 @RequestMapping("/products")
 @SecurityRequirement(name = "authorization")
@@ -23,16 +28,26 @@ public class ProductController {
     // Variabel
     private final ProductService service;
 
-    // hemlighet som används för interna anrop från Order Service.
+    // Hemlighet som används för interna anrop från Order Service.
     private final String internalServiceToken;
 
-    // Konstruktor: Spring hämtar hemligheten från konfigurationen
+    /**
+     * Konstruktor för ProductController
+     *
+     * @param service              används för logiken kring produkter och lagersaldo
+     * @param internalServiceToken används för att kontrollera interna anrop
+     */
     public ProductController(ProductService service, @Value("${internal.service-token}") String internalServiceToken) {
         this.service = service;
         this.internalServiceToken = internalServiceToken;
     }
 
-    // Metod - Skapa produkt (POST)
+    /**
+     * Skapar en ny produkt
+     *
+     * @param dto innehåller information om produkten som ska skapas
+     * @return den skapade produkten (ProductResponseDto)
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDto> create(@Valid @RequestBody ProductRequestDto dto) {
@@ -42,21 +57,37 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // Metod - Lista produkter (GET)
+    /**
+     * Hämtar alla produkter
+     *
+     * @return en lista med alla produkter (ProductResponseDto)
+     */
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAll() {
 
         return ResponseEntity.status(HttpStatus.OK).body(service.getAllProducts());
     }
 
-    // Metod - Hämta produkter (id) (GET)
+    /**
+     * Hämtar en produkt med id
+     *
+     * @param id används för att hitta rätt produkt
+     * @return produkt med id (ProductResponseDto)
+     * @throws ProductNotFoundException om produkten inte finns
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getById(@PathVariable Long id) {
 
         return ResponseEntity.status(HttpStatus.OK).body(service.getProductById(id));
     }
 
-    // Metod - Ta bort produkt (DELETE)
+    /**
+     * Tar bort en produkt med id
+     *
+     * @param id används för att hitta produkten som ska tas bort
+     * @return ett tomt svar (ResponseEntity)
+     * @throws ProductNotFoundException om produkten inte finns
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
@@ -66,7 +97,14 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Metod - Minska lagersaldo (POST)
+    /**
+     * Minskar lagersaldot i en order
+     *
+     * @param items innehåller produkter och antal som ska dras från lagret
+     * @return information om produkterna i ordern (ProductInfo)
+     * @throws ProductNotFoundException   om en produkt inte finns
+     * @throws InsufficientStockException om lagersaldot inte räcker
+     */
     @PostMapping("/stock/decrease")
     public ResponseEntity<List<ProductInfo>> decreaseStock(@RequestBody List<OrderRequestItem> items) {
 
@@ -74,8 +112,15 @@ public class ProductController {
     }
 
 
-    // återställer lagersaldot när en Stripe-checkout löper ut
-    // endast anrop med rätt intern hemlighet får återställa lagret
+    /**
+     * Återställer lagersaldot
+     *
+     * @param items         innehåller produkter och antal som ska läggas tillbaka i lagret
+     * @param providedToken används för att kontrollera att anropet är internt
+     * @return ett tomt svar (ResponseEntity)
+     * @throws ProductNotFoundException om en produkt inte finns
+     * @throws IllegalArgumentException om antalet är 0 eller mindre
+     */
     @PostMapping("/stock/restore")
     public ResponseEntity<Void> restoreStock(
             @RequestBody List<OrderRequestItem> items,

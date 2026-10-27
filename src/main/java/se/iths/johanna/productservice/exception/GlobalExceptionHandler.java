@@ -7,10 +7,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+/**
+ * Hanterar fel i Product Service
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Metod - Hanterar valideringsfel (VALID)
+    /**
+     * Hanterar valideringsfel
+     *
+     * @param ex innehåller information om valideringsfelet
+     * @return ett felsvar med valideringsfelen
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
 
@@ -26,7 +34,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // Metod - Hanterar övriga fel
+    /**
+     * Hanterar övriga fel
+     *
+     * @param ex innehåller information om felet
+     * @return ett svar med felmeddelandet
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
 
@@ -36,14 +49,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    // Metod - Produkt hittades inte
+    /**
+     * Hanterar när en produkt inte hittas
+     *
+     * @param ex innehåller information om felet
+     * @return ett svar med status 404
+     */
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFound(ProductNotFoundException ex) {
 
         return ResponseEntity.notFound().build();
     }
 
-    // Metod - Inte tillräckligt lagersaldo
+    /**
+     * Hanterar när lagersaldot inte räcker
+     *
+     * @param ex innehåller information om felet
+     * @return ett svar med felmeddelandet
+     */
     @ExceptionHandler(InsufficientStockException.class)
     public ResponseEntity<ErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
 

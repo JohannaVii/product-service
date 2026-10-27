@@ -1,16 +1,26 @@
 package se.iths.johanna.productservice.dto;
 
+/**
+ * Information om en produkt som ingår i en order
+ */
 public class OrderRequestItem {
 
     // Variabler
     private Long productId;
     private int quantity;
 
-    // Konstruktor - Tom
+    /**
+     * Tom konstruktor
+     */
     public OrderRequestItem() {
     }
 
-    // Konstruktor
+    /**
+     * Konstruktor som skapar en produkt för en order
+     *
+     * @param productId används för att identifiera produkten
+     * @param quantity  anger antal av produkten
+     */
     public OrderRequestItem(Long productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;

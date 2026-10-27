@@ -7,9 +7,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+/**
+ * Konfigurerar CORS för Product Service
+ */
 @Configuration
 public class CorsConfig {
 
+    /**
+     * Skapar CORS-konfiguration för tillåtna anrop
+     *
+     * @return konfigurationen för CORS
+     */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
 

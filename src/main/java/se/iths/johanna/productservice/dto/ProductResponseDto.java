@@ -4,6 +4,9 @@ import se.iths.johanna.productservice.entity.Category;
 
 import java.math.BigDecimal;
 
+/**
+ * Information om en produkt som skickas tillbaka till klienten
+ */
 public class ProductResponseDto {
 
     // Variabler
@@ -15,7 +18,17 @@ public class ProductResponseDto {
     private Category category;
     private String imageUrl;
 
-    // Konstruktor
+    /**
+     * Konstruktor som skapar ett svar med produktinformation
+     *
+     * @param id          används för att identifiera produkten
+     * @param name        anger produktens namn
+     * @param description beskriver produkten
+     * @param price       produktens pris
+     * @param stock       anger produktens lagersaldo
+     * @param category    anger vilken kategori produkten tillhör
+     * @param imageUrl    anger länken till produktens bild
+     */
     public ProductResponseDto(Long id, String name, String description, BigDecimal price, int stock, Category category, String imageUrl) {
         this.id = id;
         this.name = name;
